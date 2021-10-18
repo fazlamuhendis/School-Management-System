@@ -41,27 +41,25 @@ void management_system::show_tables()
 {
     //Jsondan veriyi çekme
         json = readFile("School.json");
-       // json_datas.m_currentJsonObject=QtJson::parse(json,ok).toMap();
-       m_currentJsonObject=QtJson::parse(json,ok).toMap();
-       // m_currentJsonObject=QtJson::parse(json,ok).toMap();
+        m_currentJsonObject=QtJson::parse(json,ok).toMap();
 
         if(!ok)
             qFatal("An error occurred during parsing");
 
         json_school school_list;
-        school_list.result                                          =m_currentJsonObject["school of music"].toMap();
+        school_list.result                                          = m_currentJsonObject["school of music"].toMap();
 
-        school_list.student_list.result_student                     =school_list.result["student"].toMap();
-        school_list.student_list.result_student_id                  =school_list.student_list.result_student["1"].toMap();
+        school_list.student_list.result_student                     = school_list.result["student"].toMap();
+        school_list.student_list.result_student_id                  = school_list.student_list.result_student["1"].toMap();
 
-        school_list.teacher_list.bracnh_name                        =school_list.result["teacher"].toMap();
-        school_list.teacher_list.bracnh_list.result_teacher         =school_list.teacher_list.bracnh_name["bracnh"].toMap();
-        school_list.teacher_list.bracnh_list.result_teacher_lesson  =school_list.teacher_list.bracnh_list.result_teacher["music"].toMap();
+        school_list.teacher_list.bracnh_name                        = school_list.result["teacher"].toMap();
+        school_list.teacher_list.bracnh_list.result_teacher         = school_list.teacher_list.bracnh_name["bracnh"].toMap();
+        school_list.teacher_list.bracnh_list.result_teacher_lesson  = school_list.teacher_list.bracnh_list.result_teacher["music"].toMap();
 
 
-        school_list.class_list.grade_name              =school_list.result["class"].toMap();
-        school_list.class_list.grade_list.result_grade =school_list.class_list.grade_name["grade"].toMap();
-        school_list.class_list.grade_list.result_class_grade =school_list.class_list.grade_list.result_grade["1"].toMap();
+        school_list.class_list.grade_name                           = school_list.result["class"].toMap();
+        school_list.class_list.grade_list.result_grade              = school_list.class_list.grade_name["grade"].toMap();
+        school_list.class_list.grade_list.result_class_grade        = school_list.class_list.grade_list.result_grade["1"].toMap();
 
         ui->students_table->setRowCount(school_list.student_list.result_student.count());
         ui->students_table->setColumnCount(school_list.student_list.result_student_id.count());
@@ -94,34 +92,36 @@ void management_system::show_tables()
         {
             school_list.class_list.grade_list.result_class_grade=school_list.class_list.grade_list.result_grade[QString::number(i)].toMap();
             vector_member.monday_grd.append(school_list.class_list.grade_list.result_class_grade["monday"].toString());
-            vector_member.tuesday_grd.append(school_list.class_list.grade_list.result_class_grade["tuesday"].toString());
+            vector_member.tuesday_grd.append(school_list.class_list.grade_list.result_class_grade["tuesday "].toString());
             vector_member.wednesday_grd.append(school_list.class_list.grade_list.result_class_grade["wednesday"].toString());
             vector_member.thursday_grd.append(school_list.class_list.grade_list.result_class_grade["thursday"].toString());
             vector_member.friday_grd.append(school_list.class_list.grade_list.result_class_grade["friday"].toString());
-
         }
 
         //Tabloya yerlestırme
         for(int i=1;i<=school_list.student_list.result_student.count();i++)
         {
             table_list student_table;
-            student_table.itm_std_surname=new QTableWidgetItem(vector_member.student_surname[i-1]);
-            student_table.itm_std_name=new QTableWidgetItem(vector_member.student_name[i-1]);
-            student_table.itm_std_grade=new QTableWidgetItem(vector_member.student_grade[i-1]);
-            student_table.itm_std_age=new QTableWidgetItem(vector_member.student_age[i-1]);
-            student_table.itm_std_fee=new QTableWidgetItem(vector_member.student_fee[i-1]);
+            student_table.itm_std_surname = new QTableWidgetItem(vector_member.student_surname[i-1]);
+            student_table.itm_std_name    = new QTableWidgetItem(vector_member.student_name[i-1]);
+            student_table.itm_std_grade   = new QTableWidgetItem(QString::number(vector_member.student_grade[i-1]));
+            student_table.itm_std_age     = new QTableWidgetItem(QString::number(vector_member.student_age[i-1]));
+            student_table.itm_std_fee     = new QTableWidgetItem(QString::number(vector_member.student_fee[i-1]));
+
             ui->students_table->setItem((i-1),0,student_table.itm_std_surname);
             ui->students_table->setItem((i-1),1,student_table.itm_std_name);
             ui->students_table->setItem((i-1),2,student_table.itm_std_grade);
             ui->students_table->setItem((i-1),3,student_table.itm_std_age);
             ui->students_table->setItem((i-1),4,student_table.itm_std_fee);
         }
+
         for(int i=1;i<=school_list.teacher_list.bracnh_list.result_teacher.count();i++)
         {
             table_list teacher_table;
-            teacher_table.itm_tch_surname=new QTableWidgetItem(vector_member.teacher_surname[i-1]);
-            teacher_table.itm_tch_name=new QTableWidgetItem(vector_member.teacher_name[i-1]);
-            teacher_table.itm_tch_salary=new QTableWidgetItem(vector_member.teacher_salary[i-1]);
+            teacher_table.itm_tch_surname  = new QTableWidgetItem(vector_member.teacher_surname[i-1]);
+            teacher_table.itm_tch_name     = new QTableWidgetItem(vector_member.teacher_name[i-1]);
+            teacher_table.itm_tch_salary   = new QTableWidgetItem(QString::number(vector_member.teacher_salary[i-1]));
+
             ui->teachers_table->setItem((i-1),0,teacher_table.itm_tch_surname);
             ui->teachers_table->setItem((i-1),1,teacher_table.itm_tch_name);
             ui->teachers_table->setItem((i-1),2,teacher_table.itm_tch_salary);
@@ -129,11 +129,12 @@ void management_system::show_tables()
 
         for(int i=1;i<=school_list.class_list.grade_list.result_grade.count();i++){
             table_list class_table;
-            class_table.itm_cls_mn=new QTableWidgetItem(vector_member.monday_grd[i-1]);
-            class_table.itm_cls_tu=new QTableWidgetItem(vector_member.tuesday_grd[i-1]);
-            class_table.itm_cls_wn=new QTableWidgetItem(vector_member.wednesday_grd[i-1]);
-            class_table.itm_cls_th=new QTableWidgetItem(vector_member.thursday_grd[i-1]);
-            class_table.itm_cls_fr=new QTableWidgetItem(vector_member.friday_grd[i-1]);
+            class_table.itm_cls_mn         = new QTableWidgetItem(vector_member.monday_grd[i-1]);
+            class_table.itm_cls_tu         = new QTableWidgetItem(vector_member.tuesday_grd[i-1]);
+            class_table.itm_cls_wn         = new QTableWidgetItem(vector_member.wednesday_grd[i-1]);
+            class_table.itm_cls_th         = new QTableWidgetItem(vector_member.thursday_grd[i-1]);
+            class_table.itm_cls_fr         = new QTableWidgetItem(vector_member.friday_grd[i-1]);
+
             ui->classes_table->setItem((i-1),0,class_table.itm_cls_mn);
             ui->classes_table->setItem((i-1),1,class_table.itm_cls_tu);
             ui->classes_table->setItem((i-1),2,class_table.itm_cls_wn);
@@ -168,6 +169,8 @@ QString management_system::enumaration_teachers(int class_num)
         return "science";
     }else if(class_num==4){
         return "literature";
+    }else{
+     return 0; //bişeyler eklenebilir
     }
 }
 

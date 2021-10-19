@@ -19,6 +19,7 @@ management_system::management_system(QWidget *parent)
 {
     ui->setupUi(this);
 
+    this->setWindowTitle("Management School System");
 
     // Connecting handler slots to button click signals
     connect(ui->btn_import,&QPushButton::clicked,this,&management_system::show_tables);

@@ -22,7 +22,11 @@ management_system::management_system(QWidget *parent)
 
     // Connecting handler slots to button click signals
     connect(ui->btn_import,&QPushButton::clicked,this,&management_system::show_tables);
-    connect(ui->btn_add,&QPushButton::clicked,this,&management_system::dizide_tut);
+
+    connect(ui->btn_std_table_del,&QPushButton::clicked,this,&management_system::remove_student_member);
+    connect(ui->btn_teacher_table_del,&QPushButton::clicked,this,&management_system::remove_teacher_member);
+    connect(ui->btn_class_table_del,&QPushButton::clicked,this,&management_system::remove_class_member);
+    connect(ui->btn_st_table_add,&QPushButton::clicked,this,&management_system::dizide_tut);
 }
 
 management_system::~management_system()
@@ -67,6 +71,14 @@ void management_system::show_tables()
         ui->teachers_table->setColumnCount(school_list.teacher_list.bracnh_list.result_teacher_lesson.count());
         ui->classes_table->setRowCount(school_list.class_list.grade_list.result_grade.count());
         ui->classes_table->setColumnCount(school_list.class_list.grade_list.result_class_grade.count());
+
+        ui->students_table->setHorizontalHeaderLabels(QStringList()<<"Surname"<<"Name"<<"Grade"<<"Age"<<"Fee");
+        ui->students_table->setVerticalHeaderLabels(QStringList()<<"1"<<"2"<<"3"<<"4"<<"5"<<"6"<<"7"<<"8"<<"9"<<"10");
+        ui->teachers_table->setHorizontalHeaderLabels(QStringList()<<"Surname"<<"Name"<<"Salary");
+        ui->teachers_table->setVerticalHeaderLabels(QStringList()<<"Music"<<"Math"<<"Science"<<"Literature");
+        ui->classes_table->setHorizontalHeaderLabels(QStringList()<<"Monday"<<"Tuesday"<<"Wednesday"<<"Thursday"<<"Friday");
+        ui->classes_table->setVerticalHeaderLabels(QStringList()<<"Grade 1"<<"Grade 2");
+
 
         //Vektör dızısıne alma
         json_vector_list vector_member;
@@ -143,8 +155,25 @@ void management_system::show_tables()
         }
 }
 
+void management_system::remove_student_member()
+{
+    ui->students_table->removeRow(ui->students_table->currentRow());
+}
+
+void management_system::remove_teacher_member()
+{
+    ui->teachers_table->removeRow(ui->teachers_table->currentRow());
+}
+
+void management_system::remove_class_member()
+{
+    ui->classes_table->removeRow(ui->classes_table->currentRow());
+}
+
 void management_system::dizide_tut()
 {
+    ui->students_table->insertRow(ui->students_table->rowCount());
+
 }
 
 QString management_system::readFile(const QString &filename)
@@ -178,4 +207,22 @@ QString management_system::enumaration_teachers(int class_num)
 void management_system::set_student_table()
 {
 
+}
+
+void management_system::on_btn_st_table_add_clicked()
+{
+    m_student=new add_student(this) ;
+    m_student->show();
+}
+
+void management_system::on_btn_teacher_table_add_clicked()
+{
+    m_teacher=new add_teacher(this);
+    m_teacher->show();
+}
+
+void management_system::on_btn_class_table_add_clicked()
+{
+    m_class=new add_class(this);
+    m_class->show();
 }

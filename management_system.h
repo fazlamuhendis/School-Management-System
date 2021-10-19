@@ -12,6 +12,9 @@
 #include <QTableWidgetItem>
 
 #include "json.h"
+#include "add_student.h"
+#include "add_teacher.h"
+#include "add_class.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class management_system;}
@@ -28,14 +31,30 @@ public:
 private slots:
     void on_btn_quit_clicked();
 
+    void on_btn_st_table_add_clicked();
+
+    void on_btn_teacher_table_add_clicked();
+
+    void on_btn_class_table_add_clicked();
+
 private:
     Ui::management_system *ui;
+    add_student *m_student;
+    add_teacher *m_teacher;
+    add_class *m_class;
 
     QString json;
 
     bool ok;
 
     void show_tables();
+
+    //remove functions
+    void remove_student_member();
+
+    void remove_teacher_member();
+
+    void remove_class_member();
 
     void dizide_tut();
 

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new/icons">
+        <file>icons/btn_add.jpg</file>
+        <file>icons/btn_del.jpg</file>
+    </qresource>
+</RCC>

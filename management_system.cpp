@@ -209,20 +209,3 @@ void management_system::set_student_table()
 
 }
 
-void management_system::on_btn_st_table_add_clicked()
-{
-    m_student=new add_student(this) ;
-    m_student->show();
-}
-
-void management_system::on_btn_teacher_table_add_clicked()
-{
-    m_teacher=new add_teacher(this);
-    m_teacher->show();
-}
-
-void management_system::on_btn_class_table_add_clicked()
-{
-    m_class=new add_class(this);
-    m_class->show();
-}

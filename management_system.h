@@ -9,6 +9,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QJsonParseError>
+#include <QIODevice>
 #include <QTableWidgetItem>
 
 #include "json.h"
@@ -27,6 +29,8 @@ public:
 
 private slots:
     void on_btn_quit_clicked();
+    void on_pushButton_clicked();
+
 private:
     Ui::management_system *ui;
 
@@ -35,6 +39,8 @@ private:
     bool ok;
 
     void show_tables();
+
+    void update_json_file();
 
     //remove functions
     void remove_student_member();
@@ -47,11 +53,14 @@ private:
 
     QString readFile(const QString &filename);
 
+    bool writeFile(const QString &filename,QString json_dataset);
+
     QString enumaration_teachers(int class_num);
 
-    void set_student_table();
-
     QtJson::JsonObject m_currentJsonObject;
+
+    void json_olustur(const QString &fileName);
+    void clearJsonObject(QJsonObject &object);
 
     typedef struct
     {

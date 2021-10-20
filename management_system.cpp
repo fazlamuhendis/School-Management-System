@@ -23,6 +23,7 @@ management_system::management_system(QWidget *parent)
 
     // Connecting handler slots to button click signals
     connect(ui->btn_import,&QPushButton::clicked,this,&management_system::show_tables);
+    connect(ui->btn_update,&QPushButton::clicked,this,&management_system::update_json_file);
 
     connect(ui->btn_std_table_del,&QPushButton::clicked,this,&management_system::remove_student_member);
     connect(ui->btn_teacher_table_del,&QPushButton::clicked,this,&management_system::remove_teacher_member);
@@ -154,6 +155,136 @@ void management_system::show_tables()
             ui->classes_table->setItem((i-1),3,class_table.itm_cls_th);
             ui->classes_table->setItem((i-1),4,class_table.itm_cls_fr);
         }
+
+      /*  QtJson::JsonObject obj = QtJson::objectBuilder()
+                ->set("school of music",QtJson::objectBuilder()
+                      ->set("student",QtJson::objectBuilder()
+                            ->set("1",QtJson::objectBuilder()
+                                  ->set("surname","korkmaz")
+                                  ->set("name","sinan")
+                                  ->set("grade","2")
+                                  ->set("age","7")
+                                  ->set("fee","60000"))))
+                            ->create();
+       writeFile("School",obj);                */
+}
+
+void management_system::update_json_file()
+{
+    json_vector_list vector_member;
+
+    vector_member.student_name.clear();
+    vector_member.student_surname.clear();
+    vector_member.student_grade.clear();
+    vector_member.student_fee.clear();
+    vector_member.student_age.clear();
+
+    vector_member.teacher_surname.clear();
+    vector_member.teacher_surname.clear();
+    vector_member.teacher_salary.clear();
+
+    vector_member.monday_grd.clear();
+    vector_member.tuesday_grd.clear();
+    vector_member.wednesday_grd.clear();
+    vector_member.thursday_grd.clear();
+    vector_member.friday_grd.clear();
+
+    for(int i=0;i<ui->students_table->rowCount();i++)
+    {
+        vector_member.student_surname.append(ui->students_table->model()->index(i,0).data().toString());
+        vector_member.student_name.append(ui->students_table->model()->index(i,1).data().toString());
+        vector_member.student_grade.append(ui->students_table->model()->index(i,2).data().toInt());
+        vector_member.student_age.append(ui->students_table->model()->index(i,3).data().toInt());
+        vector_member.student_fee.append(ui->students_table->model()->index(i,4).data().toInt());
+    }
+
+    for(int i=0;i<ui->teachers_table->rowCount();i++)
+    {
+        vector_member.teacher_surname.append(ui->teachers_table->model()->index(i,0).data().toString());
+        vector_member.teacher_name.append(ui->teachers_table->model()->index(i,1).data().toString());
+        vector_member.teacher_salary.append(ui->teachers_table->model()->index(i,2).data().toInt());
+    }
+
+    for(int i=0;i<ui->classes_table->rowCount();i++)
+    {
+        vector_member.monday_grd.append(ui->classes_table->model()->index(i,0).data().toString());
+        vector_member.tuesday_grd.append(ui->classes_table->model()->index(i,1).data().toString());
+        vector_member.wednesday_grd.append(ui->classes_table->model()->index(i,2).data().toString());
+        vector_member.thursday_grd.append(ui->classes_table->model()->index(i,3).data().toString());
+        vector_member.friday_grd.append(ui->classes_table->model()->index(i,4).data().toString());
+    }
+    qDebug()<<vector_member.student_age.length();
+
+    QJsonObject json_school;
+    QJsonObject json_student;
+    QJsonObject json_teacher;
+    QJsonObject json_class;
+    QJsonObject student_id;
+    QJsonObject student_fealuare;
+    QJsonObject teacher_bracnh;
+    QJsonObject teacher_lessons;
+    QJsonObject teacher_fealuare;
+    QJsonObject classs_grade;
+    QJsonObject grade_name;
+    QJsonObject gradee_fealuare;
+
+
+    for(int i = 0 ;i<ui->students_table->rowCount();i++)
+    {
+        student_fealuare.insert("surname",vector_member.student_surname.at(i));
+        student_fealuare.insert("name",vector_member.student_name.at(i));
+        student_fealuare.insert("grade",vector_member.student_grade.at(i));
+        student_fealuare.insert("age",vector_member.student_age.at(i));
+        student_fealuare.insert("fee",vector_member.student_fee.at(i));
+        //clearJsonObject(student_fealuare);
+        student_id.insert(QString::number(i+1),student_fealuare);
+        //clearJsonObject(student_id);
+    }
+    json_student.insert("student",student_id);
+    //clearJsonObject(json_student);
+    json_school.insert("school of music",json_student);
+
+    for(int i=0;i<ui->teachers_table->rowCount();i++)
+    {
+        teacher_fealuare.insert("surname",vector_member.teacher_surname.at(i));
+        teacher_fealuare.insert("name",vector_member.teacher_name.at(i));
+        teacher_fealuare.insert("salary",vector_member.teacher_salary.at(i));
+        teacher_lessons.insert(enumaration_teachers(i+1),teacher_fealuare);
+    }
+    teacher_bracnh.insert("bracnh",teacher_lessons);
+    json_teacher.insert("teacher",teacher_bracnh);
+    json_school.insert("school of music",json_teacher);
+
+
+    for(int i=0;i<ui->classes_table->rowCount();i++)
+    {
+        gradee_fealuare.insert("monday",vector_member.monday_grd.at(i));
+        gradee_fealuare.insert("tuesday ",vector_member.tuesday_grd.at(i));
+        gradee_fealuare.insert("wednesday",vector_member.wednesday_grd.at(i));
+        gradee_fealuare.insert("thursday",vector_member.thursday_grd.at(i));
+        gradee_fealuare.insert("friday",vector_member.friday_grd.at(i));
+        grade_name.insert(QString::number(i+1),gradee_fealuare);
+    }
+    classs_grade.insert("grade",grade_name);
+    json_class.insert("class",classs_grade);
+    json_school.insert("school of music",json_class);
+
+    QJsonDocument jsonDocument;
+    jsonDocument.setObject(json_school);
+    QByteArray byteArray=jsonDocument.toJson(QJsonDocument::Indented);
+    QString filename = "Reis.json";
+    QFile file(filename);
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        qDebug() << QString("fail to open the file: %1, %2, %3").arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
+        return;
+    }
+    QTextStream out(&file);
+    out << byteArray;
+    file.close();
+    qDebug() << byteArray;
+
+
 }
 
 void management_system::remove_student_member()
@@ -189,6 +320,20 @@ QString management_system::readFile(const QString &filename)
     }
 }
 
+bool management_system::writeFile(const QString &filename,QString json_dataset)
+{
+    QFile f(filename);
+    if(!f.open(QFile::WriteOnly | QFile::Text)){
+        return false;
+    }else{
+        QTextStream stream(&f);
+        stream<<json_dataset;
+        return true;
+    }
+}
+
+
+
 QString management_system::enumaration_teachers(int class_num)
 {
     if(class_num==1){
@@ -204,9 +349,68 @@ QString management_system::enumaration_teachers(int class_num)
     }
 }
 
-
-void management_system::set_student_table()
+void management_system::json_olustur(const QString &fileName)
 {
+    QJsonArray jsonArray;
+    QJsonObject rootObject;
+    QJsonObject branchObject;
+    QJsonObject leafObject;
+    leafObject.insert("quality", 18.2);
+    leafObject.insert("temp", 25.0);
+    branchObject.insert("I1", leafObject);
+    jsonArray.append(branchObject);
+    clearJsonObject(leafObject);
+    clearJsonObject(branchObject);
+
+    leafObject.insert("quality", 2000);
+    leafObject.insert("temp", 20.0);
+    branchObject.insert("I2", leafObject);
+    jsonArray.append(branchObject);
+    clearJsonObject(leafObject);
+    clearJsonObject(branchObject);
+
+    leafObject.insert("value", 98);
+    branchObject.insert("RO Rejection", leafObject);
+    jsonArray.append(branchObject);
+    clearJsonObject(leafObject);
+    clearJsonObject(branchObject);
+
+    leafObject.insert("value", 3);
+    branchObject.insert("TOC", leafObject);
+    jsonArray.append(branchObject);
+    clearJsonObject(leafObject);
+    clearJsonObject(branchObject);
+
+    rootObject.insert("heartData", jsonArray);
+    QJsonDocument jsonDocument;
+    jsonDocument.setObject(rootObject);
+    QByteArray byteArray = jsonDocument.toJson(QJsonDocument::Indented);
+    QFile file(fileName);
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        qDebug() << QString("fail to open the file: %1, %2, %3").arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
+        return;
+    }
+    QTextStream out(&file);
+    out << byteArray;
+    file.close();
+    qDebug() << byteArray;
 
 }
 
+void management_system::clearJsonObject(QJsonObject &object)
+{
+    QStringList strList = object.keys();
+    for(int i = 0; i < strList.size(); ++i)
+    {
+        object.remove(strList.at(i));
+    }
+}
+
+
+
+
+void management_system::on_pushButton_clicked()
+{
+    json_olustur("Sinan.json");
+}

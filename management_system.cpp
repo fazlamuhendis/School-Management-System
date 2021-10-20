@@ -227,23 +227,20 @@ void management_system::update_json_file()
     QJsonObject classs_grade;
     QJsonObject grade_name;
     QJsonObject gradee_fealuare;
-
-
-    for(int i = 0 ;i<ui->students_table->rowCount();i++)
+    QJsonObject meh;
+    for(int i=0 ;i<ui->students_table->rowCount();i++)
     {
         student_fealuare.insert("surname",vector_member.student_surname.at(i));
         student_fealuare.insert("name",vector_member.student_name.at(i));
         student_fealuare.insert("grade",vector_member.student_grade.at(i));
         student_fealuare.insert("age",vector_member.student_age.at(i));
         student_fealuare.insert("fee",vector_member.student_fee.at(i));
-        //clearJsonObject(student_fealuare);
         student_id.insert(QString::number(i+1),student_fealuare);
-        //clearJsonObject(student_id);
     }
-    json_student.insert("student",student_id);
-    //clearJsonObject(json_student);
-    json_school.insert("school of music",json_student);
-
+    //json_student.insert("student",student_id);
+      meh.insert("student",student_id);
+      json_school.insert("school of music",meh);
+     // clearJsonObject(meh);
     for(int i=0;i<ui->teachers_table->rowCount();i++)
     {
         teacher_fealuare.insert("surname",vector_member.teacher_surname.at(i));
@@ -252,8 +249,10 @@ void management_system::update_json_file()
         teacher_lessons.insert(enumaration_teachers(i+1),teacher_fealuare);
     }
     teacher_bracnh.insert("bracnh",teacher_lessons);
-    json_teacher.insert("teacher",teacher_bracnh);
-    json_school.insert("school of music",json_teacher);
+    //json_teacher.insert("teacher",teacher_bracnh);
+    meh.insert("teacher",teacher_bracnh);
+    json_school.insert("school of music",meh);
+   // clearJsonObject(meh);
 
 
     for(int i=0;i<ui->classes_table->rowCount();i++)
@@ -266,8 +265,17 @@ void management_system::update_json_file()
         grade_name.insert(QString::number(i+1),gradee_fealuare);
     }
     classs_grade.insert("grade",grade_name);
-    json_class.insert("class",classs_grade);
-    json_school.insert("school of music",json_class);
+    //json_class.insert("class",classs_grade);
+    meh.insert("class",classs_grade);
+    json_school.insert("school of music",meh);
+   // clearJsonObject(meh);
+    //json_school.insert("school of music",QJsonObject(json_student));
+    //json_school.insert("school of music",QJsonObject(json_teacher));
+
+    //json_school.insert("school of music",json_student);
+   // json_school.insert("school of music",json_class);
+   // json_school.insert("school of music",json_teacher);
+
 
     QJsonDocument jsonDocument;
     jsonDocument.setObject(json_school);

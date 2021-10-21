@@ -12,6 +12,7 @@
 #include <QJsonParseError>
 #include <QIODevice>
 #include <QTableWidgetItem>
+#include <QMessageBox>
 
 #include "json.h"
 
@@ -29,7 +30,6 @@ public:
 
 private slots:
     void on_btn_quit_clicked();
-    void on_pushButton_clicked();
 
 private:
     Ui::management_system *ui;
@@ -49,34 +49,16 @@ private:
 
     void remove_class_member();
 
-    void dizide_tut();
 
-    QString readFile(const QString &filename);
+    QString read_file(const QString &filename);
 
-    bool writeFile(const QString &filename,QString json_dataset);
+    bool write_file(const QString &filename,QByteArray byteArray);
 
     QString enumaration_teachers(int class_num);
 
     QtJson::JsonObject m_currentJsonObject;
 
-    void json_olustur(const QString &fileName);
     void clearJsonObject(QJsonObject &object);
-
-    typedef struct
-    {
-        QtJson::JsonObject m_currentJsonObject;
-        QtJson::JsonObject result;
-        QtJson::JsonObject result_student;
-        QtJson::JsonObject result_teachers;
-        QtJson::JsonObject result_teacher_branches;
-        QtJson::JsonObject result_class;
-        QtJson::JsonObject result_class_grade;
-        QtJson::JsonObject result_school_bus;
-        QtJson::JsonObject result_student_feature_cnt;
-        QtJson::JsonObject result_teachers_branches_cnt;
-        QtJson::JsonObject result_class_grade_cnt;
-    } json_datas;
-
 
 
     typedef struct
@@ -166,6 +148,9 @@ private:
     }table_list;
 
 
-
+    void get_json_dataset(json_school *m_school_list);
+    void show_data_set(json_school *m_school_list,json_vector_list *m_list);
+    void json_update(const QString &fileName,json_vector_list *m_list);
+    void get_table_members(json_vector_list *m_list);
 };
 #endif // MANAGEMENT_SYSTEM_H

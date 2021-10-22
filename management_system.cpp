@@ -29,6 +29,7 @@ management_system::management_system(QWidget *parent)
     connect(ui->btn_std_table_del,&QPushButton::clicked,this,&management_system::remove_student_member);
     connect(ui->btn_teacher_table_del,&QPushButton::clicked,this,&management_system::remove_teacher_member);
     connect(ui->btn_class_table_del,&QPushButton::clicked,this,&management_system::remove_class_member);
+    status_information(status);
 }
 
 management_system::~management_system()
@@ -36,12 +37,6 @@ management_system::~management_system()
     delete ui;
 }
 
-
-
-void management_system::on_btn_quit_clicked()
-{
-    this->close();
-}
 
 
 /* @fn             -show_tables
@@ -65,6 +60,8 @@ void management_system::show_tables()
 
         get_json_dataset(&school_list);
         show_data_set(&school_list,&vector_member);
+        status+=1;
+        status_information(status);
 }
 
 
@@ -82,7 +79,9 @@ void management_system::update_json_file()
 {
     json_vector_list vector_member;
     get_table_members(&vector_member);
-    json_update("Reis.json",&vector_member);
+    json_update("School.json",&vector_member);
+    status=0;
+    status_information(status);
 }
 
 
@@ -123,7 +122,7 @@ void management_system::get_json_dataset(json_school *m_school_list)
     ui->teachers_table->setHorizontalHeaderLabels(QStringList()<<"Surname"<<"Name"<<"Salary");
     ui->teachers_table->setVerticalHeaderLabels(QStringList()<<"Music"<<"Math"<<"Science"<<"Literature");
     ui->classes_table->setHorizontalHeaderLabels(QStringList()<<"Monday"<<"Tuesday"<<"Wednesday"<<"Thursday"<<"Friday");
-    ui->classes_table->setVerticalHeaderLabels(QStringList()<<"Grade 1"<<"Grade 2");
+    ui->classes_table->setVerticalHeaderLabels(QStringList()<<"1"<<"2");
 }
 
 
@@ -351,7 +350,6 @@ QString management_system::read_file(const QString &filename)
 {
     QFile f(filename);
     if (!f.open(QFile::ReadOnly | QFile::Text)) {
-        qDebug()<<"basarısız";
         return QString();
     } else {
         QTextStream in(&f);
@@ -450,4 +448,66 @@ void management_system::remove_class_member()
 }
 
 
+/* @fn             -status_information
+ *
+ * @brief          -A function that specifies which button will be active and which will not, according to the value of the state variable.
+ *
+ * @param[in]	   -status program.---Type:int
+ *
+ * @return         - none
+ */
+void management_system::status_information(int val)
+{
+    if(val==0)
+    {
+        ui->btn_import->setEnabled(true);
+        ui->btn_update->setEnabled(false);
+        ui->btn_st_table_add->setEnabled(false);
+        ui->btn_std_table_del->setEnabled(false);
+        ui->btn_teacher_table_add->setEnabled(false);
+        ui->btn_teacher_table_del->setEnabled(false);
+        ui->btn_class_table_add->setEnabled(false);
+        ui->btn_class_table_del->setEnabled(false);
+        ui->students_table->setEnabled(false);
+        ui->teachers_table->setEnabled(false);
+        ui->classes_table->setEnabled(false);
+    }
+    else if (val==1)
+    {
+        ui->btn_import->setEnabled(false);
+        ui->btn_update->setEnabled(true);
+        ui->btn_st_table_add->setEnabled(true);
+        ui->btn_std_table_del->setEnabled(true);
+        ui->btn_teacher_table_add->setEnabled(true);
+        ui->btn_teacher_table_del->setEnabled(true);
+        ui->btn_class_table_add->setEnabled(true);
+        ui->btn_class_table_del->setEnabled(true);
+        ui->students_table->setEnabled(true);
+        ui->teachers_table->setEnabled(true);
+        ui->classes_table->setEnabled(true);
+    }
+}
 
+
+/* @fn             -on_btn_st_table_add_clicked,on_btn_teacher_table_add_clicked,on_btn_class_table_add_clicked
+ *
+ * @brief          -Button-triggered functions that add the marked row in tables.
+ *
+ * @param[in]	   -none
+ *
+ * @return         -none
+ */
+void management_system::on_btn_st_table_add_clicked()
+{
+    ui->students_table->insertRow(ui->students_table->rowCount());
+}
+
+void management_system::on_btn_teacher_table_add_clicked()
+{
+    ui->teachers_table->insertRow(ui->teachers_table->rowCount());
+}
+
+void management_system::on_btn_class_table_add_clicked()
+{
+    ui->classes_table->insertRow(ui->classes_table->rowCount());
+}

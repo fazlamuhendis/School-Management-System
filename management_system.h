@@ -29,7 +29,11 @@ public:
     ~management_system();
 
 private slots:
-    void on_btn_quit_clicked();
+    void on_btn_st_table_add_clicked();
+
+    void on_btn_class_table_add_clicked();
+
+    void on_btn_teacher_table_add_clicked();
 
 private:
     Ui::management_system *ui;
@@ -37,6 +41,10 @@ private:
     QString json;
 
     bool ok;
+
+    int status=0;
+
+    void status_information(int val);
 
     void show_tables();
 
@@ -154,3 +162,5 @@ private:
     void get_table_members(json_vector_list *m_list);
 };
 #endif // MANAGEMENT_SYSTEM_H
+
+

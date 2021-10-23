@@ -222,10 +222,10 @@ QTabBar::tab:selected, QTabBar::tab:last:selected, QTabBar::tab:hover {
        <enum>QTabWidget::West</enum>
       </property>
       <property name="tabShape">
-       <enum>QTabWidget::Triangular</enum>
+       <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -234,7 +234,7 @@ QTabBar::tab:selected, QTabBar::tab:last:selected, QTabBar::tab:hover {
        <bool>true</bool>
       </property>
       <property name="documentMode">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -531,9 +531,9 @@ selection-background-color:#282828;
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="Lessons">
+      <widget class="QWidget" name="Class">
        <attribute name="title">
-        <string>Lessons</string>
+        <string>Class</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
@@ -810,7 +810,7 @@ QPushButton:disabled{
      <x>0</x>
      <y>0</y>
      <width>814</width>
-     <height>18</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
